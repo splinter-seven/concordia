@@ -1,0 +1,264 @@
+/******************************************************************************/
+	function efx(dir)
+	{
+		this.snd = new Audio(dir);
+	}
+	
+	
+	// play sound effects
+	efx.prototype.play = function()
+	{
+		this.snd.play();
+	}
+/******************************************************************************/
+
+
+
+
+
+/******************************************************************************/
+	function deck()
+	{
+		this.status = 'inactive';
+		this.video = "";
+		this.name = "";
+	}
+	
+	// volume functions
+	deck.prototype.volume = function(vol)
+	{
+		obj = this.video;
+		obj.setVolume(vol);
+	}
+	
+	deck.prototype.returnVolume = function()
+	{
+		obj = this.video;
+		return obj.getVolume();
+	}
+	
+	// deck update fuctions
+	deck.prototype.statusUpdate = function()
+	{
+		obj = this.video;
+		return obj.getVideoLoadedFraction();
+	}
+	
+	deck.prototype.timeUpdate = function()
+	{
+		obj = this.video;
+		return obj.getCurrentTime();
+	}
+	
+	deck.prototype.state = function()
+	{
+		obj = this.video;
+		return obj.getPlayerState();
+	}
+	
+	// deck setup functions
+	deck.prototype.associate = function(obj, str)
+	{
+		this.video = obj;
+		this.name = str;
+	}
+	
+	deck.prototype.switchStatus = function()
+	{
+		this.status = this.status == 'inactive' ? 'active' : 'inactive';
+	}
+	
+	// deck load functions
+	deck.prototype.load = function(id)
+	{
+		obj = this.video;
+		if(this.status == "active"){
+			obj.loadVideoById(id, 0);
+		}
+	}
+	
+	deck.prototype.cue = function(id)
+	{
+		obj = this.video;
+		if(this.status == "inactive"){
+			obj.cueVideoById(id, 10);
+		}
+	}
+	
+	// deck play controls
+	deck.prototype.play = function()
+	{
+		obj = this.video;
+		obj.playVideo();
+	}
+	
+	deck.prototype.stop = function()
+	{
+		obj = this.video;
+		obj.stopVideo();
+	}
+	
+	deck.prototype.pause = function()
+	{
+		obj = this.video;
+		obj.pauseVideo();
+	}
+/******************************************************************************/
+
+var currentVideo = 0;
+var params = { allowScriptAccess: "always" };
+var videos = new Array("N00dtt6kOjo","jy18UqKRKcY","Bfu_7h15WLU","jyyFf5In-m0","nK1TqCdwRsI","E7trsy11auM");
+
+var atts = {id:'videoA'};
+swfobject.embedSWF(	
+	"http://www.youtube.com/apiplayer?enablejsapi=1&playerapiid=videoA", "videoA", "425", "365", "8", null, null, params, atts
+);
+
+var atts = {id:'videoB'};
+swfobject.embedSWF(	
+	"http://www.youtube.com/apiplayer?enablejsapi=1&playerapiid=videoB", "videoB", "425", "365", "8", null, null, params, atts
+);
+	
+	
+
+function onYouTubePlayerReady (playerId){
+	video1 = document.getElementById("videoA");
+	video2 = document.getElementById("videoB");
+	
+	//create two decks
+	var deckA = new deck();
+	var deckB = new deck();
+	
+	//set the video to deck association
+	deckA.associate(video1, "deckA");
+	deckB.associate(video2, "deckB");	
+	
+	initialize(deckA, deckB);
+	
+}
+
+function initialize(deckA, deckB) {
+	//initialize playback
+	deckA.switchStatus();
+	deckA.volume(100);
+	deckA.load(videos[currentVideo]);
+	deckB.volume(0);
+	cueNext(isInActive(deckA, deckB));
+	
+	playback(deckA, deckB);
+	//var sndEfx = new efx("sfx/AirHorn-Reggae.mp3");
+	//sndEfx.play();
+}
+
+// this function controls the time between each video
+function playback(deckA, deckB) {
+	var rand = Math.round(Math.random() * 120);
+	var timer = setInterval(
+		function(){
+			deck = isActive(deckA, deckB);
+			var time = deck.timeUpdate();
+			if(time > 120){
+				switchPlayer(deckA, deckB, timer);
+			}		
+			
+			console.log(Math.round(time)+" : "+rand);
+			if(rand == Math.round(time)){
+				playEFX();
+				rand = Math.round(Math.random() * 120);
+			}
+		}, 500
+	);
+}
+
+
+// this function plays a sound effect
+function playEFX(){
+	var sndEfx = new efx("sfx/air_horn_jamaican_dancehall_style_005.mp3");
+	sndEfx.play();
+	sndEfx = new efx("sfx/Laser_Cannon-Mike_Koenig-797224747.mp3");
+	sndEfx.play();
+	sndEfx = new efx("sfx/650826_SOUNDDOGS__se.mp3");
+	sndEfx.play();
+}
+
+
+// this function cues up the next video to be played
+// it also runs in an infinite loop
+function cueNext(deck){	
+	if(currentVideo < (videos.length-1)){
+		currentVideo++;
+	} else {
+		currentVideo = 0;
+	}console.log(currentVideo);
+	deck.cue(videos[currentVideo]);
+	
+}
+
+
+/****************************** Cross fade family *****************************/
+//this function does the cross fading from one video to the next
+function switchPlayer(deckA, deckB, timer) {
+	clearInterval(timer);
+	active = isActive(deckA, deckB);
+	inactive = isInActive(deckA, deckB);
+	var xfade = setInterval(
+		function(){
+			if(active.state() == 1) {
+				fadeOut(active);
+				setupDeck(inactive);
+				fadeIn(inactive);
+			} else {
+				if(active.state() == 5) {
+					clearInterval(xfade);
+					deckA.switchStatus();
+					deckB.switchStatus();
+					cueNext(isInActive(deckA, deckB));
+					playback(deckA, deckB);
+					
+				}
+			}
+		}, 500
+	);
+}
+
+function setupDeck(deck) {
+	if(deck.state() != 1){
+		deck.volume(0);
+		deck.play();
+	}
+}
+
+function fadeOut(deck) {
+	if(deck.returnVolume() > 0){
+		vol = deck.returnVolume();
+		deck.volume(vol - 5);	
+	} else {
+		deck.stop();
+	}
+}
+
+
+function fadeIn(deck) {
+	if(deck.returnVolume() < 100){
+		vol = deck.returnVolume();
+		deck.volume(vol + 5);	
+	} 
+}
+
+/*************************** End cross fade family ****************************/
+
+function isActive(deckA, deckB) {
+	if(deckA.status == "active") {
+		return deckA;
+	} else {
+		return deckB;
+	}
+}
+
+function isInActive(deckA, deckB) {
+	if(deckA.status == "inactive") {
+		return deckA;
+	} else {
+		return deckB;
+	}
+}
