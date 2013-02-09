@@ -8,7 +8,10 @@
 	// play sound effects
 	efx.prototype.play = function()
 	{
+<<<<<<< HEAD
 		//this.snd.setVolume(0.5);
+=======
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 		this.snd.play();
 	}
 /******************************************************************************/
@@ -146,15 +149,24 @@ function initialize(deckA, deckB) {
 	deckB.volume(0);
 	cueNext(isInActive(deckA, deckB));
 	
+<<<<<<< HEAD
 	playback(deckA, deckB, 0);
+=======
+	playback(deckA, deckB);
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 	//var sndEfx = new efx("sfx/AirHorn-Reggae.mp3");
 	//sndEfx.play();
 }
 
 // this function controls the time between each video
+<<<<<<< HEAD
 function playback(deckA, deckB, sfxStart) {
 	var soundEfx = randomEFX();
 	var count = sfxStart;
+=======
+function playback(deckA, deckB) {
+	var rand = Math.round(Math.random() * 120);
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 	var timer = setInterval(
 		function(){
 			deck = isActive(deckA, deckB);
@@ -162,10 +174,18 @@ function playback(deckA, deckB, sfxStart) {
 			if(time > 120){
 				switchPlayer(deckA, deckB, timer);
 			}		
+<<<<<<< HEAD
 			//console.log(soundEfx[count] +" : "+ Math.round(time))			
 			if(soundEfx[count] == Math.round(time) && count < 24){
 				playEFX(1);
 				count++;
+=======
+			
+			console.log(Math.round(time)+" : "+rand);
+			if(rand == Math.round(time)){
+				playEFX();
+				rand = Math.round(Math.random() * 120);
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 			}
 		}, 500
 	);
@@ -173,6 +193,7 @@ function playback(deckA, deckB, sfxStart) {
 
 
 // this function plays a sound effect
+<<<<<<< HEAD
 function playEFX(num){
 	var clips = new Array(
 		"sfx/air_horn.mp3",
@@ -221,6 +242,15 @@ function shuffleArray(array) {
         array[j] = temp;
     }
     return array;
+=======
+function playEFX(){
+	var sndEfx = new efx("sfx/air_horn_jamaican_dancehall_style_005.mp3");
+	sndEfx.play();
+	sndEfx = new efx("sfx/Laser_Cannon-Mike_Koenig-797224747.mp3");
+	sndEfx.play();
+	sndEfx = new efx("sfx/650826_SOUNDDOGS__se.mp3");
+	sndEfx.play();
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 }
 
 
@@ -255,7 +285,11 @@ function switchPlayer(deckA, deckB, timer) {
 					deckA.switchStatus();
 					deckB.switchStatus();
 					cueNext(isInActive(deckA, deckB));
+<<<<<<< HEAD
 					playback(deckA, deckB, 4);
+=======
+					playback(deckA, deckB);
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 					
 				}
 			}

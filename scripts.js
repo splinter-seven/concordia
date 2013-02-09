@@ -147,7 +147,11 @@ function initialize(deckA, deckB) {
 	cueNext(isInActive(deckA, deckB));
 	
 	playback(deckA, deckB, 0);
+<<<<<<< HEAD
 	//var sndEfx = new efx("sfx/AirHorn-Reggae.ogg");
+=======
+	//var sndEfx = new efx("sfx/AirHorn-Reggae.mp3");
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 	//sndEfx.play();
 }
 
@@ -175,6 +179,7 @@ function playback(deckA, deckB, sfxStart) {
 // this function plays a sound effect
 function playEFX(num){
 	var clips = new Array(
+<<<<<<< HEAD
 		"sfx/air_horn.ogg",
 		"sfx/Laser_Cannon-Mike_Koenig-797224747.ogg",
 		"sfx/650826_SOUNDDOGS__se.ogg",
@@ -185,6 +190,20 @@ function playEFX(num){
 	);
 	
 	var randomClips = shuffleArray(clips);
+=======
+		"sfx/air_horn_jamaican_dancehall_style_005.mp3",
+		"sfx/Laser_Cannon-Mike_Koenig-797224747.mp3",
+		"sfx/650826_SOUNDDOGS__se.mp3",
+		"sfx/Alien_Machine_Gun-Matt_Cutillo-2023875589.mp3",
+		"sfx/VideoGame-DukeNukem-DamnImGood.mp3",
+		"sfx/InfinityWard-LogoSound.mp3",
+		"sfx/ray_gun-Mike_Koenig-1169060422.mp3",
+		"sfx/Laser_Gun-Mike_Koenig-1975537935.mp3"
+	);
+	
+	var randomClips = shuffleArray(clips);
+	
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 	for(var i = 0; i<num; i++){
 		var sndEfx = new efx(randomClips[i]);
 		sndEfx.play();
@@ -206,7 +225,11 @@ function randomEFX(){
 		max += 5;
 		next ++;
 	}
+<<<<<<< HEAD
 	
+=======
+	console.log(random.length);
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 	return random;
 }
 
@@ -229,7 +252,11 @@ function cueNext(deck){
 		currentVideo++;
 	} else {
 		currentVideo = 0;
+<<<<<<< HEAD
 	}
+=======
+	}console.log(currentVideo);
+>>>>>>> 9f9258fa9ecbc39419605538df534ed2acd7cc67
 	deck.cue(videos[currentVideo]);
 	
 }
